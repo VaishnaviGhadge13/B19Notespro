@@ -49,6 +49,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.UUID;
 
 import easy.tuto.notespro.data.AlarmReminderContract;
@@ -57,7 +58,7 @@ import easy.tuto.notespro.reminder.AlarmScheduler;
 
 public class AddReminderActivity extends AppCompatActivity implements
         TimePickerDialog.OnTimeSetListener,
-        DatePickerDialog.OnDateSetListener, LoaderManager.LoaderCallbacks<Cursor>{
+        DatePickerDialog.OnDateSetListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private Toolbar mToolbar;
     private TextView mTitleText;
@@ -117,14 +118,31 @@ public class AddReminderActivity extends AppCompatActivity implements
         mFAB1 = (FloatingActionButton) findViewById(R.id.starred1);
         mFAB2 = (FloatingActionButton) findViewById(R.id.starred2);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Set onClick listener for mTimeText to show time picker
+        mTimeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePickerDialog();
+            }
+        });
+
+// Set onClick listener for mDateText to show date picker
+        mDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+
+
 
         // Initialize default values
         mActive = "true";
         mRepeat = "true";
         mRepeatNo = Integer.toString(1);
         mRepeatType = "Hour";
-        Intent asdf=getIntent();
-        String rt=asdf.getStringExtra("REMINDER_TITLE");
+        Intent asdf = getIntent();
+        String rt = asdf.getStringExtra("REMINDER_TITLE");
         mTitleText.setText(rt);
         mCalendar = Calendar.getInstance();
         mHour = mCalendar.get(Calendar.HOUR_OF_DAY);
@@ -140,7 +158,8 @@ public class AddReminderActivity extends AppCompatActivity implements
         mTitleText.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -150,19 +169,20 @@ public class AddReminderActivity extends AppCompatActivity implements
 
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
-        ImageButton d= (ImageButton) findViewById(R.id.deletebtn);
+        ImageButton d = (ImageButton) findViewById(R.id.deletebtn);
         d.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent id=getIntent();
-                if(mReminderId==null)
-                {
-                    Toast.makeText(AddReminderActivity.this,"hdhgdhgdahk",Toast.LENGTH_SHORT).show();
+                Intent id = getIntent();
+                String abcd=id.getStringExtra("REMINDER_ID");
+                if (abcd == null) {
+                    Toast.makeText(AddReminderActivity.this, "hdhgdhgdahk", Toast.LENGTH_SHORT).show();
                 }
-                String rd=id.getStringExtra("NOTE_ID");
-                deleteReminder(rd, mReminderId, new OnCompleteListener<Void>() {
+                String rd = id.getStringExtra("NOTE_ID");
+                deleteReminder(rd, abcd, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // Handle completion of the delete operation
@@ -238,38 +258,34 @@ public class AddReminderActivity extends AppCompatActivity implements
         mReminderId = getIntent().getStringExtra("REMINDER_ID");
         if (mReminderId != null) {
             // Load existing reminder data and populate EditText fields
-            Intent intent=getIntent();
-            String x=intent.getStringExtra("NOTE_ID");
-            if(x!=null) {
-                loadReminderData();            }
-            else
-            {
-                Toast.makeText(AddReminderActivity.this,"null note's ID",Toast.LENGTH_SHORT).show();
+            Intent intent = getIntent();
+            String x = intent.getStringExtra("NOTE_ID");
+            if (x != null) {
+                loadReminderData();
+            } else {
+                Toast.makeText(AddReminderActivity.this, "null note's ID", Toast.LENGTH_SHORT).show();
 
             }
 
 
         }
-        ImageButton donebtn=findViewById(R.id.donebtn);
+        ImageButton donebtn = findViewById(R.id.donebtn);
         donebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ContentValues values = new ContentValues();
-                String alarmTitle=mTitleText.getText().toString();
+                String alarmTitle = mTitleText.getText().toString();
                 values.put(AlarmReminderContract.AlarmReminderEntry.KEY_TITLE, alarmTitle);
                 // Generate a unique ID for the reminder
                 String reminderId = UUID.randomUUID().toString();
-                Intent intent=getIntent();
-                String xy=intent.getStringExtra("NOTE_ID");
-                if(xy!=null)
-                {
+                Intent intent = getIntent();
+                String xy = intent.getStringExtra("NOTE_ID");
+                if (xy != null) {
                     saveReminder();
                     /*firestoreHelper=new FirestoreHelper(xy);
                     firestoreHelper.addReminder(xy,mReminderId,values);*/
-                }
-                else
-                {
-                   // saveReminder(view);
+                } else {
+                    // saveReminder(view);
                 }
 
                 //
@@ -277,26 +293,6 @@ public class AddReminderActivity extends AppCompatActivity implements
         });
     }
 
-    /*private void loadReminderData(String noteId) {
-        // Assuming you have initialized mReminderId and firestoreHelper earlier
-        firestoreHelper.loadReminderData(noteId, mReminderId, new FirestoreHelper.LoadReminderDataListener() {
-            @Override
-            public void onLoadReminderDataSuccess(Reminder reminder) {
-                // Populate EditText fields with reminder data
-                mTitleText.setText(reminder.getTitle());
-                mDateText.setText(reminder.getDate());
-                mTimeText.setText(reminder.getTime());
-                mRepeatNoText.setText(reminder.getRepeatNo());
-                mRepeatTypeText.setText(reminder.getRepeatType());
-            }
-
-            @Override
-            public void onLoadReminderDataFailure(String errorMessage) {
-                // Handle failure to load reminder data
-                Toast.makeText(AddReminderActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
     private void loadReminderData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -304,36 +300,36 @@ public class AddReminderActivity extends AppCompatActivity implements
 
         // Replace '.' with '_' in the email ID to avoid Firestore restrictions
         String sanitizedEmail = userEmail.replace(".", "_");
-        Intent x=getIntent();
-        String abc=x.getStringExtra("NOTE_ID");
+        Intent x = getIntent();
+        String abc = x.getStringExtra("NOTE_ID");
         db.collection("notes").document(sanitizedEmail).collection("reminders").document(abc)
-        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    // Document exists, extract data and update UI
-                    String title = documentSnapshot.getString("title");
-                    String date = documentSnapshot.getString("date");
-                    String time = documentSnapshot.getString("time");
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // Document exists, extract data and update UI
+                            String title = documentSnapshot.getString("title");
+                            String date = documentSnapshot.getString("date");
+                            String time = documentSnapshot.getString("time");
 
-                    // Update UI elements with reminder data
-                    mTitleText.setText(title);
-                    mDateText.setText(date);
-                    mTimeText.setText(time);
-                } else {
-                    // Document does not exist
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // Handle failure
-            }
-        });
+                            // Update UI elements with reminder data
+                            mTitleText.setText(title);
+                            mDateText.setText(date);
+                            mTimeText.setText(time);
+                        } else {
+                            // Document does not exist
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure
+                    }
+                });
     }
 
     @Override
-    protected void onSaveInstanceState (Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putCharSequence(KEY_TITLE, mTitleText.getText());
@@ -402,10 +398,6 @@ public class AddReminderActivity extends AppCompatActivity implements
     }
 
 
-
-
-
-
     private void setAlarm() {
         long timeInMillis = mCalendar.getTimeInMillis(); // Assuming you have already set the date and time in the mCalendar object
         String reminderTitle = mTitleText.getText().toString(); // Assuming the title is entered in the EditText mTitleText
@@ -423,7 +415,7 @@ public class AddReminderActivity extends AppCompatActivity implements
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-        i1 ++;
+        i1++;
         mDay = i2;
         mMonth = i1;
         mYear = i;
@@ -442,6 +434,7 @@ public class AddReminderActivity extends AppCompatActivity implements
         }
         mTimeText.setText(mTime);
     }
+
     public void setTime(View v) {
         if (mCurrentReminderUri == null) {
             Toast.makeText(this, "Click again on the reminder list to set time alarm", Toast.LENGTH_LONG).show();
@@ -528,7 +521,6 @@ public class AddReminderActivity extends AppCompatActivity implements
             String active = cursor.getString(activeColumnIndex);
 
 
-
             // Update the views on the screen with the values from the database
             mTitleText.setText(title);
             mDateText.setText(date);
@@ -539,11 +531,10 @@ public class AddReminderActivity extends AppCompatActivity implements
 
             // Setup up active buttons
             // Setup repeat switch
-            if (repeat == null){
+            if (repeat == null) {
                 mRepeatSwitch.setChecked(false);
                 mRepeatText.setText(R.string.repeat_off);
-            }
-            else if (repeat.equals("false")) {
+            } else if (repeat.equals("false")) {
                 mRepeatSwitch.setChecked(false);
                 mRepeatText.setText(R.string.repeat_off);
 
@@ -560,6 +551,7 @@ public class AddReminderActivity extends AppCompatActivity implements
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
     // On clicking the active button
     public void selectFab1(View v) {
         mFAB1 = (FloatingActionButton) findViewById(R.id.starred1);
@@ -591,7 +583,7 @@ public class AddReminderActivity extends AppCompatActivity implements
     }
 
     // On clicking repeat type button
-    public void selectRepeatType(View v){
+    public void selectRepeatType(View v) {
         final String[] items = new String[5];
 
         items[0] = "Minute";
@@ -617,7 +609,7 @@ public class AddReminderActivity extends AppCompatActivity implements
     }
 
     // On clicking repeat interval button
-    public void setRepeatNo(View v){
+    public void setRepeatNo(View v) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Enter Number");
 
@@ -633,8 +625,7 @@ public class AddReminderActivity extends AppCompatActivity implements
                             mRepeatNo = Integer.toString(1);
                             mRepeatNoText.setText(mRepeatNo);
                             mRepeatText.setText("Every " + mRepeatNo + " " + mRepeatType + "(s)");
-                        }
-                        else {
+                        } else {
                             mRepeatNo = input.getText().toString().trim();
                             mRepeatNoText.setText(mRepeatNo);
                             mRepeatText.setText("Every " + mRepeatNo + " " + mRepeatType + "(s)");
@@ -648,6 +639,7 @@ public class AddReminderActivity extends AppCompatActivity implements
         });
         alert.show();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_editor.xml file.
@@ -680,11 +672,9 @@ public class AddReminderActivity extends AppCompatActivity implements
             case R.id.save_reminder:
 
 
-                if (mTitleText.getText().toString().length() == 0){
+                if (mTitleText.getText().toString().length() == 0) {
                     mTitleText.setError("Reminder Title cannot be blank!");
-                }
-
-                else {
+                } else {
                     saveReminder();
                     finish();
                 }
@@ -722,6 +712,7 @@ public class AddReminderActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
+
     private void showUnsavedChangesDialog(
             DialogInterface.OnClickListener discardButtonClickListener) {
         // Create an AlertDialog.Builder and set the message, and click listeners
@@ -743,6 +734,7 @@ public class AddReminderActivity extends AppCompatActivity implements
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the positive and negative buttons on the dialog.
@@ -785,51 +777,23 @@ public class AddReminderActivity extends AppCompatActivity implements
         alertDialog.show();
     }
 
-    /*private void showDeleteConfirmationDialog() {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.delete_dialog_msg);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the reminder.
-                Intent i=getIntent();
-                String idd=i.getStringExtra("NOTE_ID");
-                String asd=i.getStringExtra("REMINDER_ID");
-                deleteReminder(idd,asd,);
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the reminder.
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
 
-        // Create and show the AlertDialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }*/
     public void deleteReminder(String noteId, String reminderId, final OnCompleteListener<Void> listener) {
+        FirebaseFirestore db;
         // Get reference to the document containing the reminder to delete
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            db = FirebaseFirestore.getInstance();
-            String userEmail = currentUser.getEmail();
+        db = FirebaseFirestore.getInstance();
+        String userEmail = currentUser.getEmail();
 
-            // Replace '.' with '_' in the email ID to avoid Firestore restrictions
-            String sanitizedEmail = userEmail.replace(".", "_");
-            DocumentReference docRef = db.collection("notes").document(sanitizedEmail).collection("reminders").document(noteId).collection("Reminders of Note").document(reminderId);
-
+        // Replace '.' with '_' in the email ID to avoid Firestore restrictions
+        String sanitizedEmail = userEmail.replace(".", "_");
+        DocumentReference docRef = db.collection("notes").document(sanitizedEmail).collection("reminders").document(noteId).collection("Reminders of Note").document(reminderId);
 
         // Delete the document
         docRef.delete().addOnCompleteListener(new com.google.android.gms.tasks.OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    cancelAlarm();
                     // Reminder deleted successfully
                     listener.onComplete(task);
                 } else {
@@ -841,7 +805,6 @@ public class AddReminderActivity extends AppCompatActivity implements
     }
 
 
-
     public void saveReminder() {
         String title = mTitleText.getText().toString();
         String date = mDateText.getText().toString();
@@ -850,9 +813,9 @@ public class AddReminderActivity extends AppCompatActivity implements
         String repeatType = mRepeatTypeText.getText().toString();
         String active = "true";
         // Save or update reminder to Firestore
-        String y=getIntent().getStringExtra("NOTE_ID");
+        String y = getIntent().getStringExtra("NOTE_ID");
         FirestoreHelper firestoreHelper = new FirestoreHelper(y);
-        Reminder reminder = new Reminder(mReminderId, title, date, time,mRepeat, repeatNo, repeatType, active);
+        Reminder reminder = new Reminder(mReminderId, title, date, time, mRepeat, repeatNo, repeatType, active);
         firestoreHelper.saveReminder(reminder, new FirestoreHelper.OnCompleteListener() {
             @Override
             public void onComplete(boolean success) {
@@ -870,77 +833,59 @@ public class AddReminderActivity extends AppCompatActivity implements
             }
         });
     }
-    // Assuming you have initialized FirebaseFirestore instance
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-/*
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Attach a listener to read the data from Firestore
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        String userEmail = currentUser.getEmail();
-        Intent i=getIntent();
-        String reminderId=i.getStringExtra("REMINDER_ID");
-        // Replace '.' with '_' in the email ID to avoid Firestore restrictions
-        String sanitizedEmail = userEmail.replace(".", "_");
-        Intent x=getIntent();
-        String abc=x.getStringExtra("NOTE_ID");
-        if(reminderId!=null && abc!=null)
-        {
-            db.collection("notes").document(sanitizedEmail).collection("reminders").document(abc).collection("Reminders of Note")
-                    .document(reminderId)
-                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                            if (e != null) {
-                                Log.w(TAG, "Listen failed.", e);
-                                return;
-                            }
+    private void showTimePickerDialog() {
+        // Initialize calendar with current time
+        Calendar now = Calendar.getInstance();
+        int hour = now.get(Calendar.HOUR_OF_DAY);
+        int minute = now.get(Calendar.MINUTE);
 
-                            if (documentSnapshot != null && documentSnapshot.exists()) {
-                                // Document found, retrieve data and update UI
-                                String title = documentSnapshot.getString("title");
-                                String date = documentSnapshot.getString("date");
-                                String time = documentSnapshot.getString("time");
-                                String repeat = documentSnapshot.getString("repeat");
-                                String repeatNo = documentSnapshot.getString("repeatNo");
-                                String repeatType = documentSnapshot.getString("repeatType");
-                                String active = documentSnapshot.getString("active");
-
-                                // Update UI with fetched data
-                                mTitleText.setText(title);
-                                mDateText.setText(date);
-                                mTimeText.setText(time);
-                                mRepeatNoText.setText(repeatNo);
-                                mRepeatTypeText.setText(repeatType);
-                                mRepeatText.setText("Every " + repeatNo + " " + repeatType + "(s)");
-                                // Setup up active buttons
-                                // Setup repeat switch
-                                if (repeat == null) {
-                                    mRepeatSwitch.setChecked(false);
-                                    mRepeatText.setText(R.string.repeat_off);
-                                } else if (repeat.equals("false")) {
-                                    mRepeatSwitch.setChecked(false);
-                                    mRepeatText.setText(R.string.repeat_off);
-                                } else if (repeat.equals("true")) {
-                                    mRepeatSwitch.setChecked(true);
-                                }
-                            } else {
-                                Log.d(TAG, "No such document");
-                            }
-                        }
-                    });
-        }
-        else
-        {
-            Toast.makeText(AddReminderActivity.this,"Something is nulll",Toast.LENGTH_SHORT).show();
-        }
+        // Create and show time picker dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        // Update mTimeText with selected time
+                        mHour = hourOfDay;
+                        mMinute = minute;
+                        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute);
+                        mTimeText.setText(formattedTime);
+                    }
+                },
+                hour,
+                minute,
+                false
+        );
+        timePickerDialog.show();
     }
 
+    private void showDatePickerDialog() {
+        // Initialize calendar with current date
+        Calendar now = Calendar.getInstance();
+        int year = now.get(Calendar.YEAR);
+        int month = now.get(Calendar.MONTH);
+        int dayOfMonth = now.get(Calendar.DAY_OF_MONTH);
 
-
-// Add other methods as needed
-*/
+        // Create and show date picker dialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        // Update mDateText with selected date
+                        monthOfYear++; // Months are zero-based in DatePickerDialog
+                        mDay = dayOfMonth;
+                        mMonth = monthOfYear;
+                        mYear = year;
+                        String formattedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", dayOfMonth, monthOfYear, year);
+                        mDateText.setText(formattedDate);
+                    }
+                },
+                year,
+                month,
+                dayOfMonth
+        );
+        datePickerDialog.show();
+    }
 
 }

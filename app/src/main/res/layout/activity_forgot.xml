@@ -8,6 +8,8 @@
     android:scrollbars="none"
     tools:context=".ForgotActivity">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +40,7 @@
             android:text="Forgot Password"
             android:textAlignment="center"
             android:textAllCaps="true"
-            android:textColor="@color/black"
+            android:textColor="#000000"
             android:textSize="34sp"
             android:textStyle="bold" />
 
@@ -48,7 +50,7 @@
             android:layout_height="wrap_content"
             android:text="Provide your account's email for which you want to reset your password!"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="#000000"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -59,14 +61,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:hint="Email"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="@color/black">
+            android:textColorHint="#000000"
+            app:boxStrokeColor="#000000">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtForgotPasswordEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="#000000"
                 android:inputType="textEmailAddress"
                 android:singleLine="true" />
 
@@ -88,12 +90,12 @@
                 android:id="@+id/btnReset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="#FFFDD0"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="10dp"
-                android:textColor="@color/white"
+                android:textColor="#000000"
                 android:textStyle="bold"
                 android:text="Reset Password"
                 app:cornerRadius="10dp"
@@ -106,18 +108,18 @@
             android:id="@+id/btnBack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/my_primary"
+            android:backgroundTint="#FFFDD0"
             android:paddingStart="20dp"
             android:paddingTop="10dp"
             android:paddingEnd="20dp"
             android:paddingBottom="10dp"
             android:text="Back"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textColor="#000000"
             app:cornerRadius="10dp"
             app:icon="@drawable/baseline_arrow_back_24"
             app:iconGravity="textStart"
-            app:iconTint="@color/black" />
+            app:iconTint="#000000" />
 
 
     </LinearLayout>

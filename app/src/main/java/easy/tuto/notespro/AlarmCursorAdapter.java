@@ -1,4 +1,5 @@
 package easy.tuto.notespro;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,16 +15,33 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import easy.tuto.notespro.data.AlarmReminderContract;
 
 public class AlarmCursorAdapter extends CursorAdapter {
 
     private TextView mTitleText, mDateAndTimeText, mRepeatInfoText;
     private ImageView mActiveImage , mThumbnailImage;
+    private List<Reminder> reminderList;
 
     public AlarmCursorAdapter(Context context, Cursor c) {
-        super(context, c, 0 /* flags */);
+        super(context, c, 0);
+        reminderList = new ArrayList<>();
     }
+
+    // Method to add a new reminder to both cursor and list
+    public void addReminder(Reminder reminder) {
+        // Add reminder to the list
+        reminderList.add(reminder);
+        // Notify adapter that data has changed
+        notifyDataSetChanged();
+    }
+
+    /*public AlarmCursorAdapter(Context context, Cursor c) {
+        super(context, c, 0 );
+    }*/
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -41,8 +59,19 @@ public class AlarmCursorAdapter extends CursorAdapter {
         // Your existing code to retrieve data from the cursor...
 
         // Set reminder title
-        @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex(AlarmReminderContract.AlarmReminderEntry.KEY_TITLE));
-        setReminderTitle(title);
+        // Set reminder title
+        // Get the index of the KEY_TITLE column
+        int titleIndex = cursor.getColumnIndex(AlarmReminderContract.AlarmReminderEntry.KEY_TITLE);
+        if (titleIndex != -1) {
+            // The column exists, so retrieve the title
+            String title = cursor.getString(titleIndex);
+            // Set the title to the appropriate view
+            setReminderTitle(title);
+        } else {
+            // Handle the case where the column doesn't exist
+            // For example, log an error message or set a default value for the title
+        }
+
 
         // Set reminder date and time
         @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex(AlarmReminderContract.AlarmReminderEntry.KEY_DATE));
@@ -118,4 +147,5 @@ public class AlarmCursorAdapter extends CursorAdapter {
         canvas.drawText(text, x, y, paint);
         return bitmap;
     }
+
 }

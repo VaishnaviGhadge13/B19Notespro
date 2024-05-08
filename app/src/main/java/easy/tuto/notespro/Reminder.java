@@ -24,6 +24,12 @@ public class Reminder {
         this.repeatType = repeatType;
         this.active = active;
     }
+
+    public Reminder(String reminderId, String title) {
+        this.rid=reminderId;
+        this.title=title;
+    }
+
     public String getId()
     {
         return rid;

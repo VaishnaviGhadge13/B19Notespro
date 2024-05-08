@@ -8,29 +8,7 @@
         <item>#00FF00</item>
         <item>#0000FF</item>
     </string-array>-->
-    <string-array name="font_color_options">
-        <item>Black</item>
-        <item>Red</item>
-        <item>Green</item>
-        <item>Blue</item>
-        <item>Purple</item>
-        <item>Cyan</item>
-        <item>Magenta</item>
-        <item>Yellow</item>
-    </string-array>
 
 
-
-    <string-array name="background_color_options">
-        <item>#FFFFFF</item> <!-- White -->
-        <item>#F5F5F5</item> <!-- Light Gray -->
-        <item>#EEEEEE</item> <!-- Light Gray 2 -->
-        <item>#E0E0E0</item> <!-- Light Gray 3 -->
-        <item>#BDBDBD</item> <!-- Gray -->
-        <item>#9E9E9E</item> <!-- Gray 2 -->
-        <item>#757575</item> <!-- Dark Gray -->
-        <item>#616161</item> <!-- Dark Gray 2 -->
-        <item>#424242</item> <!-- Dark Gray 3 -->
-    </string-array>
 
 </resources>

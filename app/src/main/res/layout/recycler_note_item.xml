@@ -31,9 +31,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/note_timestamp_text_view"
-        android:text="note title"
+        android:text="timestamp"
         android:textSize="12sp"
         android:gravity="right"
         android:layout_marginVertical="4dp"/>
+
 
 </LinearLayout>

@@ -31,7 +31,9 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:contentDescription="TODO"
-            android:src="@drawable/ic_baseline_done_24" />
+            android:src="@drawable/ic_baseline_done_24"
+            />
+
 
         <ImageButton
             android:id="@+id/menu_btn"
@@ -53,8 +55,7 @@
             android:layout_marginStart="240dp"
             android:layout_marginEnd="91dp"
             android:background="@drawable/baseline_add_alarm_24"
-            android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/ic_alarm_on_white_24dp" />
+            android:contentDescription="@string/app_name" />
 
 
     </RelativeLayout>
@@ -69,6 +70,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,6 +81,9 @@
             android:layout_marginVertical="8dp"
             android:padding="12dp"
             android:textColor="#000000"/>
+
+
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,32 +98,6 @@
 
     </LinearLayout>
 
-    <Spinner
-        android:id="@+id/font_size_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tittle_bar_layout_next"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:visibility="invisible" />
-
-    <Spinner
-        android:id="@+id/font_color_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/font_size_spinner"
-        android:layout_marginTop="16dp"
-        android:visibility="invisible"
-        android:background="@drawable/rounded_corner"/>
-
-    <Spinner
-        android:id="@+id/background_color_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/font_color_spinner"
-        android:layout_marginTop="16dp"
-        android:visibility="invisible"/>
-
     <TextView
         android:id="@+id/delete_note_text_view_btn"
         android:layout_width="wrap_content"
@@ -132,7 +111,54 @@
         android:textSize="18sp"
         android:visibility="gone" />
 
+    <RelativeLayout
+        android:id="@+id/options_layout"
+        android:layout_width="250dp"
+        android:layout_height="180dp"
+        android:layout_below="@id/tittle_bar_layout_next"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="22dp"
+        android:visibility="invisible"
+        android:background="#FFFDD0">
 
+        <Spinner
+            android:id="@+id/font_size_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="invisible" />
+
+        <Spinner
+            android:id="@+id/font_color_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/font_size_spinner"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="invisible" />
+        <Spinner
+            android:id="@+id/background_color_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/font_color_spinner"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="invisible" />
+        <Spinner
+            android:id="@+id/text_style_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/background_color_spinner"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="invisible" />
+
+
+
+
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

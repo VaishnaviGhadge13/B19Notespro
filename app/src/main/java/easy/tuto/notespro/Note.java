@@ -42,7 +42,16 @@ public class Note {
     private String title;
     private String content;
     private String fontSize;
-    private String fontColor;
+
+    public void setTextstyle(String textstyle) {
+        this.textstyle = textstyle;
+    }
+
+    public String getTextstyle() {
+        return textstyle;
+    }
+
+    private String fontColor,textstyle;
     private String backgroundColor;
     private Timestamp timestamp; // Store both date and time
 
@@ -77,7 +86,7 @@ public class Note {
     }
 
     public String getFontColor() {
-        return fontColor;
+        return fontColor != null ? fontColor : "#000000";
     }
 
     public void setFontColor(String fontColor) {
@@ -85,7 +94,7 @@ public class Note {
     }
 
     public String getBackgroundColor() {
-        return backgroundColor;
+        return backgroundColor != null ? backgroundColor : "#FFFFFF";
     }
 
     public void setBackgroundColor(String backgroundColor) {

@@ -1,4 +1,3 @@
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,7 +21,7 @@
             android:textColor="#000000"
             android:textStyle="bold"/>
 
-
+        <!-- Menu Button -->
         <ImageButton
             android:id="@+id/menu_btn"
             android:layout_width="48dp"
@@ -34,15 +33,58 @@
             android:src="@drawable/ic_baseline_menu_24"
             app:tint="#000000" />
 
+        <!-- Search Icon -->
+        <ImageButton
+            android:id="@+id/search_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_toStartOf="@id/menu_btn"
+            android:layout_marginEnd="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Search"
+            android:src="@drawable/ic_search"
+            app:tint="#000000" />
 
     </RelativeLayout>
 
+    <!-- Search Layout -->
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/title_bar_layout"
+        android:visibility="gone"
+        android:layout_marginTop="8dp">
+
+        <!-- Search Field -->
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="Search by Title"
+            android:inputType="text"
+            android:padding="16dp"/>
+
+        <!-- Search Button -->
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyler_view"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/title_bar_layout" />
+        android:layout_below="@id/searchLayout"
+        android:layout_marginTop="8dp"/>
 
+    <!-- Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_note_btn"
         android:layout_width="wrap_content"

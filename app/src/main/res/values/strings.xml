@@ -1,16 +1,53 @@
 <resources>
     <string name="app_name">Notes Pro</string>
 
-    <string name="choose_font_size">Choose font size</string>
-    <string name="choose_font_color">Choose font color</string>
-    <string name="choose_background_color">Choose background color</string>
+    <string name="choose_font_size"><font fgcolor="#000000">Choose font size</font></string>
+    <string name="choose_font_color"><font fgcolor="#000000">Choose font color</font></string>
+    <string name="choose_background_color"><font fgcolor="#000000">Choose background color</font></string>
+    <string name="choose_text_style"><font fgcolor="#000000">Choose Text style</font></string>
+
 
     <string-array name="font_size_options">
         <item>@string/choose_font_size</item>
-        <item>Small (12)</item>
-        <item>Medium (16)</item>
-        <item>Large (20)</item>
+        <item><font fgcolor="#FFFFFF">Small (12)</font></item>
+        <item><font fgcolor="#FFFFFF">Medium (16)</font></item>
+        <item><font fgcolor="#FFFFFF">Large (20)</font></item>
     </string-array>
+
+    <string-array name="text_style_options">
+        <item>@string/choose_text_style</item>
+        <item>Bold</item>
+        <item>Italic</item>
+        <item>Underline</item>
+    </string-array>
+
+
+    <string-array name="font_color_options">
+        <item>@string/choose_font_color</item>
+        <item>Black</item>
+        <item>Red</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Purple</item>
+        <item>Cyan</item>
+        <item>Magenta</item>
+        <item>Yellow</item>
+    </string-array>
+
+
+    <string-array name="background_color_options">
+        <item>@string/choose_background_color</item>
+        <item>Black</item>
+        <item>Red</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Purple</item>
+        <item>Cyan</item>
+        <item>Magenta</item>
+        <item>Yellow</item>
+
+    </string-array>
+
 
 
 

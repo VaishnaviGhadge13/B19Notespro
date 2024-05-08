@@ -64,14 +64,20 @@ public class MainActivity2 extends AppCompatActivity implements LoaderManager.Lo
         reminderListView.setEmptyView(emptyView);
         reminderText = findViewById(R.id.reminderText);
 
-        reminderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*reminderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Reminder clickedReminder = (Reminder) adapterView.getItemAtPosition(position);
                 if (clickedReminder != null) {
                     String reminderId = clickedReminder.getId(); // Get the ID of the clicked reminder
                     String reminderTitle = clickedReminder.getTitle();
-
+                    if (reminderId != null) {
+                        Toast.makeText(MainActivity2.this, "hdhgdhgdahk", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(MainActivity2.this, "123456789", Toast.LENGTH_SHORT).show();
+                    }
                     // Pass both reminder ID and title to the AddReminderActivity
                     Intent intent = new Intent(MainActivity2.this, AddReminderActivity.class);
                     intent.putExtra("NOTE_ID", noteId);
@@ -80,7 +86,30 @@ public class MainActivity2 extends AppCompatActivity implements LoaderManager.Lo
                     startActivity(intent);
                 }
             }
+        });*/
+        reminderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Reminder clickedReminder = (Reminder) mCursorAdapter.getItem(position);
+                if (clickedReminder != null) {
+                    String reminderId = clickedReminder.getId();
+                    String reminderTitle = clickedReminder.getTitle();
+                    if (reminderId != null) {
+                        Toast.makeText(MainActivity2.this, "rid="+reminderId, Toast.LENGTH_SHORT).show();
+                    }else
+                    {
+                        Toast.makeText(MainActivity2.this, "rid=", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Intent intent = new Intent(MainActivity2.this, AddReminderActivity.class);
+                    intent.putExtra("NOTE_ID", noteId);
+                    intent.putExtra("REMINDER_ID", reminderId);
+                    intent.putExtra("REMINDER_TITLE", reminderTitle);
+                    startActivity(intent);
+                }
+            }
         });
+
 
 
 
@@ -177,6 +206,13 @@ public class MainActivity2 extends AppCompatActivity implements LoaderManager.Lo
                     // Call addReminder with noteId, reminderId, and values
                     firestoreHelper.addReminder(noteId, reminderId, values);
 
+                    // Populate the list view with the new reminder title
+                    Reminder newReminder = new Reminder(reminderId, title);
+                    mCursorAdapter.addReminder(newReminder);
+
+                    // Show the reminder text if it was hidden
+                    reminderText.setVisibility(View.VISIBLE);
+
                     // Reload the data after successful insertion
                     restartLoader();
                 } else {
@@ -193,6 +229,7 @@ public class MainActivity2 extends AppCompatActivity implements LoaderManager.Lo
 
         builder.show();
     }
+
 
     public void restartLoader() {
         getSupportLoaderManager().restartLoader(VEHICLE_LOADER, null, this);
